@@ -2,6 +2,7 @@
 
 var parse = require('./parse');
 var isInput = require('./isInput');
+var momentum = require('./momentum');
 
 function defaults (options, cal) {
   var temp;
@@ -57,7 +58,17 @@ function defaults (options, cal) {
   if (o.dateValidator === no) { o.dateValidator = Function.prototype; }
   if (o.timeValidator === no) { o.timeValidator = Function.prototype; }
   if (o.timeFormat === no) { o.timeFormat = 'HH:mm'; }
-  if (o.weekStart === no) { o.weekStart = 0; }
+  if (o.weekStart === no) { o.weekStart = momentum.moment().weekday(0).day(); }
+  if (o.weekdayFormat === no) { o.weekdayFormat = 'min'; }
+  if (o.weekdayFormat === 'long') {
+    o.weekdayFormat = momentum.moment.weekdays();
+  } else if (o.weekdayFormat === 'short') {
+    o.weekdayFormat = momentum.moment.weekdaysShort();
+  } else if (o.weekdayFormat === 'min') {
+    o.weekdayFormat = momentum.moment.weekdaysMin();
+  } else if (!Array.isArray(o.weekdayFormat) || o.weekdayFormat.length < 7) {
+    throw new Error('`weekdays` must be `min`, `short`, or `long`');
+  }
   if (o.monthsInCalendar === no) { o.monthsInCalendar = 1; }
   if (o.monthFormat === no) { o.monthFormat = 'MMMM YYYY'; }
   if (o.dayFormat === no) { o.dayFormat = 'DD'; }

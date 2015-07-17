@@ -1,3 +1,87 @@
+# 2.1.17 Bull Run
+
+- Updated `bullseye@1.4.3`
+
+# 2.1.14 We The People
+
+- Fixed regression caused by `2.1.10` where you could no longer enter a valid date typing manually
+
+# 2.1.13 Bugcatcher
+
+- Bumped `crossvent@1.2.0`, fixing a bug removing `focus` event listener
+
+# 2.1.12 Now is not the Time
+
+- Replaced use of `Date.now` with `new Date()` because browser support
+- Bumped `bullseye@1.0.5`
+- Bumped `crossvent@1.1.0`
+
+# 2.1.9 Eye of the Tiger
+
+- Extracted positioning API into `bullseye`
+- Fixed a bug where inline calendars couldn't be instantiated
+
+# 2.1.8 Cross Ventures
+
+- Replaced `./events` with `crossvent` for code reuse
+
+# 2.1.5 Rat's Nest
+
+- Fixed a bug where inline date pickers would blink for a brief moment on the screen, when initialized
+
+# 2.1.1 Life Raft
+
+- Removed dependency on `raf`
+
+# 2.1.0 Garage Band
+
+- Added the ability to set `autoClose` to `'time'`, which only automatically hides the calendar when and if a time is picked
+
+# 2.0.4 Strictosaur
+
+- Added `strictParse` option to avoid partial matches against `inputFormat`
+
+# 2.0.3 Full Throttle
+
+- Remove dependency on `lodash.throttle`
+
+# 2.0.2 Terror
+
+- Removed unnecessary `'ready'` event listener from inline calendars
+
+# 2.0.1 Reset Mayhem
+
+- Fixed an issue where input calendars wouldn't be hidden upon initialization
+- Fixed an issue where `.options()` would forget an internal setting that identifies inputs
+- Fixed an issue where `.options.reset()` would forget the container for an inline calendar
+- Fixed an issue where `.options.reset()` would hide an inline calendar
+
+# 2.0.0 Invasion
+
+- Removed necessity to wait until `'ready'` event was fired in order to interact with calendar
+- Event listeners registered on a `'destroy'` event handler will no longer be immediately removed
+- Introduced ability to pass `weekdayFormat` as an array with 7 strings
+
+# 1.2.4 Tunnel Vision
+
+- Fixed [an issue](https://github.com/bevacqua/rome/issues/30) where `autoHideOnBlur` wouldn't work on Firefox
+
+# 1.2.3 Park Bully
+
+- Fixed an issue where you couldn't navigate months if the calendar was out of range
+
+# 1.2.2 Fill Form at the Counter
+
+- Added ability to change weekdays format
+
+# 1.2.1 Time Matters
+
+- Changed navigation buttons to `button` type
+
+# 1.2.0 Week Starts
+
+- Changed `weekStart` default value to `moment().weekday(0).day()`
+
 # 1.1.6 Warner Brothers
 
 - Circumvented a deprecation warning from `moment`

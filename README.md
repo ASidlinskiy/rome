@@ -64,7 +64,7 @@ Creating a calendar has a ton of options. These have reasonable defaults that ar
 Option             | Description
 -------------------|--------------------------------------------------------------------------------------------------
 `appendTo`         | DOM element where the calendar will be appended to. Takes `'parent'` as the parent element
-`autoClose`        | Closes the calendar when picking a day or a time
+`autoClose`        | When set to `true`, the calendar is auto-closed when picking a day _(or a time if `time: true` and `date: false`). A value of `'time'` will only auto-close the calendar when a time is picked.
 `autoHideOnBlur`   | Hides the calendar when focusing something other than the input field
 `autoHideOnClick`  | Hides the calendar when clicking away
 `date`             | The calendar shows days and allows you to navigate between months
@@ -73,6 +73,7 @@ Option             | Description
 `initialValue`     | Value used to initialize calendar. Takes `string`, `Date`, or `moment`
 `inputFormat`      | Format string used for the input field as well as the results of `rome`
 `invalidate`       | Ensures the date is valid when the field is blurred
+`strictParse`      | Compares input strictly against `inputFormat`, and partial matches are discarded
 `max`              | Disallow dates past `max`. Takes `string`, `Date`, or `moment`
 `min`              | Disallow dates before `min`. Takes `string`, `Date`, or `moment`
 `monthFormat`      | Format string used by the calendar to display months and their year
@@ -83,9 +84,10 @@ Option             | Description
 `timeFormat`       | Format string used to display the time on the calendar
 `timeInterval`     | Seconds between each option in the time dropdown
 `timeValidator`    | Function to validate that a given time is considered valid. Receives a native `Date` parameter.
+`weekdayFormat`    | Format used to display weekdays. Takes `min` _(Mo)_, `short` _(Mon)_, `long` _(Monday)_, or an array with seven strings of your choosing.
 `weekStart`        | Day considered the first of the week. Range: Sunday `0` - Saturday `6`
 
-Note that in the case of input fields, when `initialValue` isn't provided the initial value is inferred from `elem.value` instead. In the case of inline calendars, `Date.now` will be used as a default if none is provided.
+Note that in the case of input fields, when `initialValue` isn't provided the initial value is inferred from `elem.value` instead. In the case of inline calendars, `new Date()` will be used as a default if none is provided.
 
 #### Inlining the Calendar
 
@@ -119,6 +121,7 @@ If you don't set an option, the default will be used. You can [look up the defau
   "monthFormat": "MMMM YYYY",
   "monthsInCalendar": 1,
   "required": false,
+  "strictParse": false,
   "styles": {
     "back": "rd-back",
     "container": "rd-container",
@@ -144,7 +147,8 @@ If you don't set an option, the default will be used. You can [look up the defau
   "timeFormat": "HH:mm",
   "timeInterval": 1800,
   "timeValidator": Function.prototype,
-  "weekStart": 0
+  "weekdayFormat": "min",
+  "weekStart": moment().weekday(0).day()
 }
 ```
 
@@ -204,7 +208,7 @@ If no options object is provided, a copy of the current options is returned.
 
 ##### `.options.reset()`
 
-Resets the options to the factory defaults. Effectively the same as calling `.options({})`.
+Resets the options to the factory defaults. Effectively the same as calling `.options({})` while preserving the `appendTo` option.
 
 ##### `.emitValues()`
 
@@ -217,6 +221,16 @@ Sets the current date to the provided `value`, but only if that value is valid a
 ##### `.refresh()`
 
 Forces a refresh of the calendar. This method will redraw the month and update the dates that can be selected in accordance with `dateValidator` and `timeValidator`.
+
+##### `.back()`
+
+Steps the calendar display back by one month. Equivalent to clicking the 'back' button.
+Returns `undefined`.
+
+##### `.next()`
+
+Steps the calendar display forward by one month. Equivalent to clicking the 'next' button.
+Returns `undefined`.
 
 #### Events
 
@@ -233,14 +247,8 @@ Event       | Arguments   | Description
 `time`      | `[time]`    | The time may have been updated by the calendar. Formatted time string is provided
 `show`      | `[]`        | The calendar has been displayed
 `hide`      | `[]`        | The calendar has been hidden
-
-Please note that you may need to wait for the calendar's `'ready'` event before interacting with it, otherwise most of the API will result in a no-op.
-
-```js
-rome(elem).once('ready', function () {
-  this.show();
-});
-```
+`back`      | `[month]`   | The calendar view has been moved back a month to the value `moment.month()`
+`next`      | `[month]`   | The calendar view has been moved forward a month to the value `moment.month()`
 
 #### Date and Time Validator
 
@@ -268,11 +276,11 @@ Returns whether the date is after the provided value. The comparison uses `>`, m
 
 #### `rome.val.beforeEq(value)`
 
-Returns whether the date is after the provided value. The comparison uses `<=`, meaning it's inclusive.
+Returns whether the date is before the provided value. The comparison uses `<=`, meaning it's inclusive.
 
 #### `rome.val.before(value)`
 
-Returns whether the date is after the provided value. The comparison uses `<`, meaning it's exclusive.
+Returns whether the date is before the provided value. The comparison uses `<`, meaning it's exclusive.
 
 #### `rome.val.except(left, right)`
 
